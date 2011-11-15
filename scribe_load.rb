@@ -34,7 +34,7 @@ def generate_entries(category,size,num)
     $chars[rand() * $chars.length]
   end
   def generate_message(size)
-    (0...size).map{|i| random_char}.join
+    (0...(size - 1)).map{|i| random_char}.join + "\n"
   end
   (0...num).map{|i| LogEntry.new(:category => category, :message => generate_message(size))}
 end
