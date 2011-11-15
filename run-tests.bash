@@ -74,9 +74,32 @@ eucjpresult=$?
 
 sleep 1
 
-echo '############################### RESULT ###############################'
-echo "utf8:" $utf8result ", sjis:" $sjisresult ", eucjp:" $eucjpresult
+### for ascii
+echo '############################### ASCII ###############################'
+bundle exec fluentd -c conf/fluentd.ascii.conf 2>&1 &
+fluentdpid=$!
+sleep 5
 
-[ $utf8result -eq 0 ] && [ $sjisresult -eq 0 ] && [ $eucjpresult -eq 0 ] && exit 0
+python scribeline/misc/scribe_server_dummy.py 14463 > ./results/result.ascii.txt &
+scribedpid=$!
+sleep 1
+
+cat source/ascii.source.txt | python scribeline/misc/scribe_client_dummy.py -h localhost:14464 ASCII
+sleep 3
+
+kill $fluentdpid
+kill $scribedpid
+
+sleep 5
+
+diff -B source/result_sample.ascii.txt results/result.ascii.txt
+asciiresult=$?
+
+sleep 1
+
+echo '############################### RESULT ###############################'
+echo "utf8:" $utf8result ", sjis:" $sjisresult ", eucjp:" $eucjpresult ", ascii:" $asciiresult
+
+[ $utf8result -eq 0 ] && [ $sjisresult -eq 0 ] && [ $eucjpresult -eq 0 ] && [ $asciiresult -eq 0 ] && exit 0
 
 exit 1
