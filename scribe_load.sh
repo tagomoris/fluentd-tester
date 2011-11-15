@@ -61,27 +61,27 @@ echo 'throuput(bytes/sec) for 10000 msgs/s'
 echo ''
 date
 echo '50 bytes/message'
-ruby scribe_load.rb $target_host 1463 TESTING 50 200 80 60
+ruby scribe_load.rb $target_host 1463 TESTING 50 200 50 60
 sleep 1
 echo ''
 date
 echo '100 bytes/message'
-ruby scribe_load.rb $target_host 1463 TESTING 100 200 80 60
+ruby scribe_load.rb $target_host 1463 TESTING 100 200 50 60
 sleep 1
 echo ''
 date
 echo '200 bytes/message'
-ruby scribe_load.rb $target_host 1463 TESTING 200 200 80 60
+ruby scribe_load.rb $target_host 1463 TESTING 200 200 50 60
 sleep 1
 echo ''
 date
 echo '400 bytes/message'
-ruby scribe_load.rb $target_host 1463 TESTING 400 200 80 60
+ruby scribe_load.rb $target_host 1463 TESTING 400 200 50 60
 sleep 1
 echo ''
 date
 echo '800 bytes/message'
-ruby scribe_load.rb $target_host 1463 TESTING 800 200 80 60
+ruby scribe_load.rb $target_host 1463 TESTING 800 200 50 60
 sleep 1
 echo ''
 date
