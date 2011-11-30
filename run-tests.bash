@@ -1,6 +1,7 @@
 #!/bin/bash -x
 
 bundle install --path vendor/bundle
+git clone git://github.com/tagomoris/fluent-plugin-test-counter.git || (cd fluent-plugin-test-counter && git pull)
 git clone git://github.com/tagomoris/scribe_line scribeline || (cd scribeline && git pull)
 
 mkdir results
@@ -97,9 +98,60 @@ asciiresult=$?
 
 sleep 1
 
-echo '############################### RESULT ###############################'
-echo "utf8:" $utf8result ", sjis:" $sjisresult ", eucjp:" $eucjpresult ", ascii:" $asciiresult
+### for large thrift message (100bytes 10,000 lines)
+echo '############################### LARGE DATA ###############################'
+[ -f results/result.large.log ] && rm -f results/result.large.log
+bundle exec fluentd -c conf/fluentd.size.conf -p fluent-plugin-test-counter/lib/fluent/plugin -o results/result.large.log &
+fluentdpid=$!
+sleep 5
+date
+perl -e '$l="a"x100 . "\n"; for($i=0;$i<10000;$i++){print $l;}' | python scribeline/misc/scribe_client_dummy.py -h localhost:1463 LARGE
+date
+sleep 3
+kill $fluentdpid
+sleep 5
+egrep -q 'test_counter: 201[0-9]{11} 10000$' results/result.large.log
+size_large=$?
+cat results/result.large.log | grep 'test_counter:'
+sleep 1
 
-[ $utf8result -eq 0 ] && [ $sjisresult -eq 0 ] && [ $eucjpresult -eq 0 ] && [ $asciiresult -eq 0 ] && exit 0
+### for huge thrift message (100bytes 100,000 lines)
+echo '############################### HUGE DATA ###############################'
+[ -f results/result.huge.log ] && rm -f results/result.huge.log
+bundle exec fluentd -c conf/fluentd.size.conf -p fluent-plugin-test-counter/lib/fluent/plugin -o results/result.huge.log &
+fluentdpid=$!
+sleep 5
+date
+perl -e '$l="a"x100 . "\n"; for($i=0;$i<100000;$i++){print $l;}' | python scribeline/misc/scribe_client_dummy.py -h localhost:1463 HUGE
+date
+sleep 3
+kill $fluentdpid
+sleep 10
+egrep -q 'test_counter: 201[0-9]{11} 100000$' results/result.huge.log
+size_huge=$?
+cat results/result.huge.log | grep 'test_counter:'
+sleep 1
+
+### for very huge thrift message (100bytes 1,000,000 lines)
+echo '############################### VERY HUGE DATA ###############################'
+[ -f results/result.vhuge.log ] && rm -f results/result.vhuge.log
+bundle exec fluentd -c conf/fluentd.size.conf -p fluent-plugin-test-counter/lib/fluent/plugin -o results/result.vhuge.log &
+fluentdpid=$!
+sleep 5
+date
+perl -e '$l="a"x100 . "\n"; for($i=0;$i<1000000;$i++){print $l;}' | python scribeline/misc/scribe_client_dummy.py -h localhost:1463 HUGE
+date
+sleep 3
+kill $fluentdpid
+sleep 10
+egrep -q 'test_counter: 201[0-9]{11} 1000000$' results/result.vhuge.log
+size_vhuge=$?
+cat results/result.vhuge.log | grep 'test_counter:'
+sleep 1
+
+echo '############################### RESULT ###############################'
+echo "utf8:" $utf8result ", sjis:" $sjisresult ", eucjp:" $eucjpresult ", ascii:" $asciiresult ", large:" $size_large ", huge:" $size_huge ", veryhuge:" $size_vhuge
+
+[ $utf8result -eq 0 ] && [ $sjisresult -eq 0 ] && [ $eucjpresult -eq 0 ] && [ $asciiresult -eq 0 ] && [ $size_large -eq 0 ] && [ $size_huge -eq 0 ] && [ $size_vhuge -eq 0 ] && exit 0
 
 exit 1
