@@ -2,3 +2,4 @@
 results/
 vendor/
 scribeline/
+Gemfile.lock

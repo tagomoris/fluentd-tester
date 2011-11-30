@@ -1,0 +1,3 @@
+[submodule "vendor/fluent-plugin-test-counter"]
+	path = vendor/fluent-plugin-test-counter
+	url = git://github.com/tagomoris/fluent-plugin-test-counter.git
