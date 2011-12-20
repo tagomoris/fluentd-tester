@@ -1,54 +1,97 @@
 #!/bin/bash
 
-target_host="rx30.standby"
+target_host="worker101.analysis"
 
-echo 'throuput(bytes/sec) for 15000 msgs/s'
+echo 'throughput(msgs/sec)'
 echo ''
 date
-echo '600 bytes/message'
-ruby scribe_load.rb $target_host 1463 TESTING 600 300 50 30
-sleep 1
-echo ''
-date
-echo '1200 bytes/message'
-ruby scribe_load.rb $target_host 1463 TESTING 1200 300 50 30
-sleep 1
-echo ''
-date
-echo '2400 bytes/message'
-ruby scribe_load.rb $target_host 1463 TESTING 2400 300 50 30
-sleep 1
-echo ''
-date
-echo '4800 bytes/message'
-ruby scribe_load.rb $target_host 1463 TESTING 4800 300 50 30
-sleep 1
-echo ''
-date
-sleep 1800
-# 2.5hours
+echo 'target 4000 msg/s'
+ruby scribe_load.rb $target_host 1463 TESTING 100 100 40 45
+sleep 900
 
-echo 'throuput(bytes/sec) for 20000 msgs/s'
 echo ''
 date
-echo '600 bytes/message'
-ruby scribe_load.rb $target_host 1463 TESTING 600 400 50 30
-sleep 1
+echo 'target 8000 msg/s'
+ruby scribe_load.rb $target_host 1463 TESTING 100 133 60 45
+sleep 900
+
 echo ''
 date
-echo '1200 bytes/message'
-ruby scribe_load.rb $target_host 1463 TESTING 1200 400 50 30
-sleep 1
+echo 'target 16000 msg/s'
+ruby scribe_load.rb $target_host 1463 TESTING 100 200 80 45
+sleep 900
+
 echo ''
 date
-echo '2400 bytes/message'
-ruby scribe_load.rb $target_host 1463 TESTING 2400 400 50 30
-sleep 1
+echo 'target 24000 msg/s'
+ruby scribe_load.rb $target_host 1463 TESTING 100 240 100 45
+sleep 900
+
+echo 'throughput(Mbps)'
 echo ''
 date
-echo '4800 bytes/message'
-ruby scribe_load.rb $target_host 1463 TESTING 4800 400 50 30
-sleep 1
+echo '10000msg/s, 200bytes/msg, 200msg/call'
+ruby scribe_load.rb $target_host 1463 TESTING 200 200 50 45
+sleep 900
+
 echo ''
 date
-# 4.5hours
+echo '10000msg/s, 400bytes/msg, 200msg/call'
+ruby scribe_load.rb $target_host 1463 TESTING 400 200 50 45
+sleep 900
+
+echo ''
+date
+echo '10000msg/s, 800bytes/msg, 200msg/call'
+ruby scribe_load.rb $target_host 1463 TESTING 800 200 50 45
+sleep 900
+
+echo ''
+date
+echo '10000msg/s, 1200bytes/msg, 200msg/call'
+ruby scribe_load.rb $target_host 1463 TESTING 1200 200 50 45
+sleep 900
+
+echo ''
+date
+echo '15000msg/s, 200bytes/msg, 300msg/call'
+ruby scribe_load.rb $target_host 1463 TESTING 200 300 50 45
+sleep 900
+
+echo ''
+date
+echo '15000msg/s, 400bytes/msg, 300msg/call'
+ruby scribe_load.rb $target_host 1463 TESTING 400 300 50 45
+sleep 900
+
+echo ''
+date
+echo '15000msg/s, 800bytes/msg, 300msg/call'
+ruby scribe_load.rb $target_host 1463 TESTING 800 300 50 45
+sleep 900
+
+echo ''
+date
+echo '15000msg/s, 1200bytes/msg, 300msg/call'
+ruby scribe_load.rb $target_host 1463 TESTING 1200 300 50 45
+sleep 900
+
+echo ''
+date
+echo '15000msg/s, 1200bytes/msg, 300msg/call'
+ruby scribe_load.rb $target_host 1463 TESTING 1200 300 50 45
+sleep 900
+
+echo ''
+date
+echo '15000msg/s, 2400bytes/msg, 300msg/call'
+ruby scribe_load.rb $target_host 1463 TESTING 2400 300 50 45
+sleep 900
+
+echo ''
+date
+echo '15000msg/s, 4800bytes/msg, 300msg/call'
+ruby scribe_load.rb $target_host 1463 TESTING 2400 300 50 45
+sleep 900
+
+# 15 hours
