@@ -40,8 +40,7 @@ def generate_category
   $counter += 1
   sprintf($category_format, $counter)
 end
-categories = (0...rate).map{|i| sprintf(category_format, i)}
-message_body = '=' * message_size
+message_body = '=' * message_size + "\n"
 
 while (last_sent = Time.now) < end_period
   (0...rate).each do |i|
