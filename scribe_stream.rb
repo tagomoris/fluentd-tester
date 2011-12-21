@@ -28,15 +28,9 @@ protocol = Thrift::BinaryProtocol.new(transport, false, false)
 client = Scribe::Client.new(protocol)
 transport.open
 
-$chars = '0123456789 abcdefg hijklmn opqrstu vwxyz __--'
-def random_char
-  $chars[rand() * $chars.length]
-end
-def generate_message(size)
-  (0...(size - 1)).map{|i| random_char}.join + "\n"
-end
+message_body = '=' * message_size
 def generate_entries(category,size,num)
-  (0...num).map{|i| LogEntry.new(:category => category, :message => generate_message(size))}
+  (0...num).map{|i| LogEntry.new(:category => category, :message => message_body)}
 end
 
 results = {
@@ -47,11 +41,11 @@ last_sent = Time.now
 
 counter = 0
 category_format = category_head + '%08d'
+categories = (0...rate).map{|i| sprintf(category_format, i)}
 while (last_sent = Time.now) < end_period
   (0...rate).each do |i|
     counter += 1
-    category = sprintf(category_format, counter)
-    chunk = generate_entries(category, message_size, message_num)
+    chunk = generate_entries(categories[i], message_size, message_num)
     r = client.Log(chunk)
     results[r] += chunk.size
   end
