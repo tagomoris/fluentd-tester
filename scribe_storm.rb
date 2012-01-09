@@ -44,6 +44,8 @@ send_times = 0
 starts = Time.now.to_i
 ends = starts + seconds
 
+puts "start sending: #{Time.now}"
+
 while (now = Time.now.to_i) < ends
   pos = 0
   while pos < message_num
@@ -59,4 +61,5 @@ end
 
 transport.close
 
+puts "end sending: #{Time.now}"
 puts "send 1/#{rate} lines of testdata, #{send_times} times in #{seconds} seconds."
