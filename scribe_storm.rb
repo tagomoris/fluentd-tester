@@ -34,10 +34,7 @@ while lines.length > 0
   cnt += 1
 end
 lines_num = selected_lines.length
-messages = []
-while selected_lines.length > 0
-  messages.push(LogEntry.new(:category => 'test', :message => selected_lines.shift(25).join().force_encoding('ASCII-8BIT')))
-end
+messages = selected_lines.map{|l| LogEntry.new(:category => 'test', :message => l.force_encoding('ASCII-8BIT'))}
 message_num = messages.length
 
 send_times = 0
@@ -51,7 +48,7 @@ puts "start sending: #{Time.now}"
 while (now = Time.now.to_i) < ends
   pos = 0
   while pos < message_num
-    next_pos = 50 + rand(50)
+    next_pos = 100 + rand(50)
     client.Log(messages[pos...next_pos])
     pos = next_pos
   end
