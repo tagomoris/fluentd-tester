@@ -33,6 +33,7 @@ while lines.length > 0
   end
   cnt += 1
 end
+lines_num = selected_lines.length
 messages = []
 while selected_lines.length > 0
   messages.push(LogEntry.new(:category => 'test', :message => selected_lines.shift(25).join().force_encoding('ASCII-8BIT')))
@@ -44,6 +45,7 @@ send_times = 0
 starts = Time.now.to_i
 ends = starts + seconds
 
+puts "selected lines: #{lines_num}, messages: #{message_num}"
 puts "start sending: #{Time.now}"
 
 while (now = Time.now.to_i) < ends
