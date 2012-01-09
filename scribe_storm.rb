@@ -35,7 +35,7 @@ while lines.length > 0
 end
 messages = []
 while selected_lines.length > 0
-  messages.push(LogEntry.new(:category => 'test', :message => selected_lines.shift(25).join()))
+  messages.push(LogEntry.new(:category => 'test', :message => selected_lines.shift(25).join().force_encoding('ASCII-8BIT')))
 end
 message_num = messages.length
 
