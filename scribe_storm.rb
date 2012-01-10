@@ -48,8 +48,9 @@ puts "start sending: #{Time.now}"
 while (now = Time.now.to_i) < ends
   pos = 0
   while pos < message_num
-    next_pos = 100 + rand(50)
+    next_pos = 300 + rand(100)
     client.Log(messages[pos...next_pos])
+    puts "sent #{next_pos - pos} messages"
     pos = next_pos
   end
   send_times += 1
